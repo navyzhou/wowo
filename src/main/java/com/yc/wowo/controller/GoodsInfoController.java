@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +27,9 @@ import com.yc.wowo.util.RequestParamUtil;
 public class GoodsInfoController{
 	@Autowired
 	private IGoodsInfoBiz goodsInfoBizImpl;
+	
+	@Value("${web.upload-path}")
+	private String uploadPath;
 
 	@RequestMapping("/findByFirst")
 	public Map<String,Object> findByFirst(@RequestParam Map<String, Object> map)  {
@@ -43,9 +47,8 @@ public class GoodsInfoController{
 
 	@RequestMapping("/upload")
 	public Map<String, Object> upload(MultipartFile upload, HttpServletRequest request) {
-		String path = request.getServletContext().getInitParameter("uploadPath");
-		String basePath = request.getServletContext().getRealPath("");
-
+		String path = "wowo_pics";
+		
 		String savePath = "";
 		File dest = null;
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -53,7 +56,7 @@ public class GoodsInfoController{
 		if (upload != null && upload.getSize() > 0) {
 			try {
 				savePath = path + "/" + new Date().getTime() + "_" + upload.getOriginalFilename();
-				dest = new File(new File(basePath).getParentFile(), savePath);
+				dest = new File(uploadPath, savePath);
 				upload.transferTo(dest);
 
 				result.put("filename", upload.getOriginalFilename());
@@ -83,9 +86,8 @@ public class GoodsInfoController{
 	}
 
 	@RequestMapping("/add")
-	public ResultDTO add(GoodsInfo gf,MultipartFile[] goods_pics, HttpServletRequest request) {
-		String path = request.getServletContext().getInitParameter("uploadPath");
-		String basePath = request.getServletContext().getRealPath("");
+	public ResultDTO add(GoodsInfo gf, MultipartFile[] goods_pics, HttpServletRequest request) {
+		String path = "wowo_pics";
 
 		String savePath = "";
 		File dest = null;
@@ -95,7 +97,7 @@ public class GoodsInfoController{
 			try {
 				for (MultipartFile pic : goods_pics) {
 					savePath = path + "/" + new Date().getTime() + "_" + pic.getOriginalFilename();
-					dest = new File(new File(basePath).getParentFile(), savePath);
+					dest = new File(uploadPath, savePath);
 					pic.transferTo(dest);
 					if ("".equals(picStr)) {
 						picStr += "../" + savePath;
@@ -110,7 +112,6 @@ public class GoodsInfoController{
 				e.printStackTrace();
 			}
 		}
-
 		int result = goodsInfoBizImpl.add(gf);
 		if (result > 0) {
 			return new ResultDTO(200, "成功");

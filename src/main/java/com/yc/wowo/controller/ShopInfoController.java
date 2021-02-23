@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +26,9 @@ import com.yc.wowo.util.RequestParamUtil;
 public class ShopInfoController {
 	@Autowired
 	private IShopInfoBiz shopInfoBizImpl;
+	
+	@Value("${web.upload-path}")
+	private String basePath;
 
 	@RequestMapping("/finds")
 	public List<ShopInfo> finds() {
@@ -47,16 +51,14 @@ public class ShopInfoController {
 
 	@RequestMapping("/add")
 	public ResultDTO add(ShopInfo sf, MultipartFile license_pic, MultipartFile[] shop_pic, HttpServletRequest request) {
-		//ShopInfo shopInfo = fileUploadUtil.uploads(ShopInfo.class, pageContext);
-		String path = request.getServletContext().getInitParameter("uploadPath");
-		String basePath = request.getServletContext().getRealPath("");
+		String path = "wowo_pics";
 		
 		String savePath = "";
 		File dest = null;
 		if (license_pic != null && license_pic.getSize() > 0) {
 			try {
 				savePath = path + "/" + new Date().getTime() + "_" + license_pic.getOriginalFilename();
-				dest = new File(new File(basePath).getParentFile(), savePath);
+				dest = new File(basePath, savePath);
 				license_pic.transferTo(dest);
 				sf.setLicense("../" + savePath);
 			} catch (IllegalStateException e) {
@@ -71,7 +73,7 @@ public class ShopInfoController {
 			try {
 				for (MultipartFile pic : shop_pic) {
 					savePath = path + "/" + new Date().getTime() + "_" + pic.getOriginalFilename();
-					dest = new File(new File(basePath).getParentFile(), savePath);
+					dest = new File(basePath, savePath);
 					pic.transferTo(dest);
 					if ("".equals(picStr)) {
 						picStr += "../" + savePath;

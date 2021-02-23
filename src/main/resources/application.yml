@@ -1,8 +1,8 @@
 server:
    port: 8888
 
-web:  
-   upload-path: D:/
+web:
+   upload-path: D:/ # 文件上传路径配置
 
 spring:
    datasource:
@@ -31,7 +31,7 @@ spring:
                ssl:
                   enable: true
                   
-   resources:
+   resources: # 静态资源路径配置
       static-locations: classpath:/META-INF/resources/,classpath:/static/,classpath:/public/,classpath:/resources/,file:${web.upload-path}
       
 mybatis:
