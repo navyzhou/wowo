@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+<meta http-equiv="Pragma" content="no-cache"> 
+<meta http-equiv="Cache-Control" content="no-cache"> 
+<meta http-equiv="Expires" content="0"> 
+<title>窝窝后台管理系统-登录界面</title>
+<base href="../">
+<link rel="shortcut icon" type="image/x-icon" href="images/logo.png"/>
+<link href="css/login.css" type="text/css" rel="stylesheet"> 
+
+</script>
+</head> 
+<body> 
+
+<div class="login">
+    <div class="message">窝窝后台管理系统-用户登录</div>
+    <div id="darkbannerwrap"></div>
+    <form id="myform">
+    	<select name="role" id="role">
+    	
+    	</select>
+    	<hr class="hr15">
+		<input name="username" id="username" placeholder="请输入姓名" required type="text" autofocus="autofocus">
+		<hr class="hr15">
+		<input name="password" id="pwd" placeholder="请输入密码" required type="password">
+		<hr class="hr15">
+		<span id="waring-info" style="color:red"></span>
+		<hr class="hr15">
+		<input value="登录" style="width:100%;" type="button" onclick="userLogin()">
+		<hr class="hr20">
+	</form>
+	<div id="adminOp">
+		<a href="pwd.html">忘记密码</a>
+	</div>
+</div>
+
+<div class="copyright">衡阳市源辰信息科技有限公司 &copy; <a href="http://www.hyycinfo.com" target="_blank">在线考试系统</a></div>
+</body>
+</html>
