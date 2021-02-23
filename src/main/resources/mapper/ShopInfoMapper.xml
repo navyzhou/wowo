@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 注意：此时的命名空间必须是对应的映射接口的全路径 -->
+<mapper namespace="com.yc.wowo.mapper.IShopInfoMapper">
+	<select id="findByPage" parameterType="map" resultType="ShopInfo">
+		select sid, sname, tid, city, area, tel, date_format(regDate, '%Y-%m-%d %H:%i') regDate, status from shopinfo order by sid limit #{page}, #{rows}
+	</select>
+	
+	<select id="total" resultType="int">
+		select count(sid) from shopinfo
+	</select>
+	
+	<insert id="add" parameterType="ShopInfo">
+		insert into shopinfo values(0, #{sname}, #{tid}, #{province},#{city}, #{area}, #{addr}, #{intro}, #{pics}, #{tel}, #{license}, now(), #{startHours}, #{endHours}, 1)
+	</insert>
+	
+	<update id="update" parameterType="ShopInfo">
+		update shopinfo set tid=#{tid}, province=#{province}, city=#{city}, area=#{area}, addr=#{addr}, intro=#{intro}, pics=#{pics}, 
+				 tel=#{tel}, startHours=#{startHours}, endHours=#{endHours}, status=#{status} where sid=#{sid}
+	</update>
+	
+	<select id="finds" resultType="ShopInfo">
+		select sid, sname from shopinfo where status !=0
+	</select>
+	
+	<select id="findBySid" resultType="ShopInfo" parameterType="string">
+		select sid, sname, tid, province, city, area, addr, intro, pics, tel, license,
+				date_format(regDate, '%Y-%m-%d %H:%i') regDate, startHours, endHours, status from shopinfo where sid=#{_parameter}
+	</select>
+	
+	<select id="totals" resultType="int" parameterType="map">
+		select count(sid) from shopinfo
+		<where>
+			<if test="tid != null and tid != ''">
+				and tid=#{tid}
+			</if>
+		
+			<if test="sname != null and sname != ''">
+				and sname like concat('%', #{sname}, '%')
+			</if>
+			
+			<if test="status != null and status != ''">
+				and status=#{status}
+			</if>
+		</where>
+	</select>
+	
+	<select id="findByCondition" resultType="ShopInfo" parameterType="map">
+		select sid, sname, tid, city, area, tel, date_format(regDate, '%Y-%m-%d %H:%i') regDate, status from shopinfo
+		<where>
+			<if test="tid != null and tid != ''">
+				and tid=#{tid}
+			</if>
+		
+			<if test="sname != null and sname != ''">
+				and sname like concat('%', #{sname}, '%')
+			</if>
+			
+			<if test="status != null and status != ''">
+				and status=#{status}
+			</if>
+		</where>
+		order by sid limit #{page}, #{rows}
+	</select>
+</mapper>

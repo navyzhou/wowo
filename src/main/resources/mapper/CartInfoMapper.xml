@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 注意：此时的命名空间必须是对应的映射接口的全路径 -->
+<mapper namespace="com.yc.wowo.mapper.ICartInfoMapper">
+	<insert id="add" parameterType="CartInfo">
+		insert into cartinfo values(0, #{mid}, #{gid}, #{nums})
+	</insert>
+	
+	<select id="findByMid" resultType="CartInfo" parameterType="int">
+		select cid, c.gid, gname, price, (price * rebate / 100) wprice, nums from goodsinfo g, cartinfo c where g.gid=c.gid and mid=#{_parameter}
+	</select>
+	
+	<update id="update" parameterType="map">
+		update cartinfo set nums=#{nums} where cid=#{cid}
+	</update>
+	
+	<delete id="del" parameterType="string">
+		delete from cartinfo where cid=#{_parameter}
+	</delete>
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 注意：此时的命名空间必须是对应的映射接口的全路径 -->
+<mapper namespace="com.yc.wowo.mapper.ITypeInfoMapper">
+	<insert id="add" parameterType="TypeInfo">
+		insert into typeinfo values(0, #{tname}, #{intro}, #{status})
+	</insert>
+	
+	<update id="update" parameterType="TypeInfo">
+		update typeinfo set tname=#{tname}, intro=#{intro}, status=#{status} where tid=#{tid}
+	</update>
+	
+	<select id="findAll" resultType="TypeInfo">
+		select tid, tname, intro, status from typeinfo order by tid
+	</select>
+	
+	<select id="finds" resultType="TypeInfo">
+		select tid, tname from typeinfo where status !=0 order by tid
+	</select>
+	
+	<select id="total" resultType="int">
+		select count(tid) from typeinfo
+	</select>
+	
+	<select id="findByPage" resultType="TypeInfo" parameterType="map">
+		select tid, tname, intro, status from typeinfo order by tid limit #{page}, #{rows}
+	</select>
+</mapper>

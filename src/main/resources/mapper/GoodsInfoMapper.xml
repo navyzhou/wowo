@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 注意：此时的命名空间必须是对应的映射接口的全路径 -->
+<mapper namespace="com.yc.wowo.mapper.IGoodsInfoMapper">
+	<select id="findByPage" parameterType="map" resultType="GoodsInfo">
+		select gid, gname, sid, price, rebate, date_format(sdate, '%Y-%m-%d %H:%i') sdate, 
+			date_format(edate, '%Y-%m-%d %H:%i') edate, status from goodsinfo order by gid desc limit #{page}, #{rows}
+	</select>
+	
+	<select id="total" parameterType="boolean" resultType="int">
+		select count(gid) from goodsinfo
+		<if test="_parameter == false">
+			where status != 0
+		</if>
+	</select>
+	
+	<insert id="add" parameterType="GoodsInfo">
+		insert into goodsinfo values(0, #{sid}, #{gname} , #{pics}, #{intro}, #{price}, #{rebate}, #{sdate}, #{edate}, #{detail}, 1)
+	</insert>
+	
+	<update id="update" parameterType="GoodsInfo">
+		update goodsinfo set sdate=#{sdate}, edate=#{edate}, status=#{status} where gid=#{gid}
+	</update>
+	
+	<select id="finds" parameterType="map" resultType="GoodsInfo">
+		select gid, gname, price, rebate, g.intro, g.pics pic, area, sname from goodsinfo g, shopinfo s  
+			where g.sid=s.sid and g.status!=0 and s.status!=0 order by gid desc limit #{page}, #{rows}
+	</select>
+	
+	<select id="findByGid" parameterType="string" resultType="GoodsInfo">
+		select gid, gname, price, rebate, g.intro, g.pics pic, area, date_format(sdate, '%Y-%m-%d %H:%i') sdate, 
+			date_format(edate, '%Y-%m-%d %H:%i') edate, detail, sname from goodsinfo g, shopinfo s where g.sid=s.sid and gid=#{_parameter}
+	</select>
+	
+	
+	<select id="totals" parameterType="map" resultType="int">
+		select count(gid) from goodsinfo
+		<where>
+			<if test="sid != null and sid != ''">
+				and sid = #{sid}
+			</if>
+			
+			<if test="gname != null and gname != ''">
+				and gname like concat('%', #{gname}, '%')
+			</if>
+			
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+		</where>
+	</select>
+	
+	<select id="findByCondition" parameterType="map" resultType="GoodsInfo">
+		select gid, gname, sid, price, rebate, date_format(sdate, '%Y-%m-%d %H:%i') sdate, 
+			date_format(edate, '%Y-%m-%d %H:%i') edate, status from goodsinfo
+		<where>
+			<if test="sid != null and sid != ''">
+				and sid = #{sid}
+			</if>
+			
+			<if test="gname != null and gname != ''">
+				and gname like concat('%', #{gname}, '%')
+			</if>
+			
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+		</where>
+		order by gid desc limit #{page}, #{rows}
+	</select>
+</mapper>
