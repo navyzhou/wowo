@@ -11,4 +11,5 @@ public class SessionKeyConstant {
 	public static final String VERIFICATIONCODE = "verificationCode"; // 图形验证码
 	public static final String MEMBERINFOLOGIN = "memberInfoLogin"; // 会员登录
 	public static final String EMAILCODE = "emailCode"; // 邮箱验证码
+	public static final String ADMINLOGIN = "adminLogin"; // 后台管理员登录
 }

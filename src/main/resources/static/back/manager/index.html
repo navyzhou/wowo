@@ -21,7 +21,7 @@
     	<h1>零食网-后台管理</h1>
     </div>
     <div class="wu-header-right">
-    	<p><strong class="easyui-tooltip" title="2条未读消息">源辰</strong>，欢迎您！</p>
+    	<p><strong id="login_info" class="easyui-tooltip" title="2条未读消息">源辰</strong>，欢迎您！</p>
         <p><a href="#">网站首页</a>|<a href="#">支持论坛</a>|<a href="#">帮助中心</a>|<a href="#">安全退出</a></p>
     </div>
 </div>
@@ -73,6 +73,7 @@
    	衡阳市源辰信息科技有限公司 &copy; 版权所有
 </div>
 <!-- end of footer -->  
+<script type="text/javascript" src="../../js/websocket.js"></script>
 <script type="text/javascript">
 $(function(){
 	$('.wu-side-tree a').bind("click",function(){
@@ -142,6 +143,21 @@ function removeTab(){
 		tabPanel.tabs('close', index);
 	}
 }
+
+$(function(){
+	$.get("../../admin/check", null, function(data){
+		if (data.code == 200) {
+			$("#login_info").text(data.data.aname);
+			
+			// 发送websocket请求，告诉websocket服务器我登录了
+			openWebSocket(data.data.aid);
+			return;
+		}
+		
+		alert("请先登录...");
+		location.href = "../index.html";
+	}, "json")
+})
 </script>
 </body>
 </html>

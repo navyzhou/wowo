@@ -1,0 +1,1 @@
+java -jar wowo.jar --spring.profiles.active=dev

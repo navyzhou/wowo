@@ -8,13 +8,12 @@
 <title>窝窝后台管理系统-登录界面</title>
 <base href="../">
 <link rel="shortcut icon" type="image/x-icon" href="images/logo.png"/>
-<link href="css/login.css" type="text/css" rel="stylesheet"> 
+<link href="css/login.css" type="text/css" rel="stylesheet">
 
-</script>
 </head> 
 <body> 
 
-<div class="login">
+<div class="login" id="loginbox">
     <div class="message">窝窝后台管理系统-用户登录</div>
     <div id="darkbannerwrap"></div>
     <form id="myform">
@@ -22,20 +21,64 @@
     	
     	</select>
     	<hr class="hr15">
-		<input name="username" id="username" placeholder="请输入姓名" required type="text" autofocus="autofocus">
+		<input name="username" v-model="account" placeholder="请输入姓名" required type="text" autofocus="autofocus">
 		<hr class="hr15">
-		<input name="password" id="pwd" placeholder="请输入密码" required type="password">
+		<input name="password" v-model="pwd" placeholder="请输入密码" required type="password">
 		<hr class="hr15">
 		<span id="waring-info" style="color:red"></span>
 		<hr class="hr15">
-		<input value="登录" style="width:100%;" type="button" onclick="userLogin()">
+		<input value="登录" style="width:100%;" type="button" @click="login">
 		<hr class="hr20">
 	</form>
 	<div id="adminOp">
 		<a href="pwd.html">忘记密码</a>
 	</div>
 </div>
+<div class="popup_con">
+	<div class="popup">
+		<p id="popup_info"></p>
+	</div>
+</div> 
 
-<div class="copyright">衡阳市源辰信息科技有限公司 &copy; <a href="http://www.hyycinfo.com" target="_blank">在线考试系统</a></div>
+<div class="copyright">衡阳市源辰信息科技有限公司 &copy; <a href="http://www.hyycinfo.com" target="_blank">窝窝团</a></div>
+<script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="js/vue.js"></script>
+<script type="text/javascript" src="js/axios.js"></script>
+<script type="text/javascript" src="js/qs.js"></script>
+<script type="text/javascript">
+function showMsg(msg, color, callback) {
+	$("#popup_info").text(msg).css("color", color);
+	$(".popup_con").fadeIn('fast', function(){
+		setTimeout(function() {
+			$(".popup_con").fadeOut('fast', callback);
+		}, 2000);
+	})
+}
+
+let login = new Vue({
+	el: '#loginbox',
+	data: {
+		account: "navy",
+		pwd: "123321",
+	},
+	methods: {
+		login: function() {
+			if (this.account == "" || this.pwd == "") {
+				showMsg("您输入的信息不完整，请重新输入...", "red");
+				return;
+			}
+			
+			axios.post("admin/login", qs.stringify({aname:this.account, pwd:this.pwd})).then(rt => {
+				if (rt.status == 200 && rt.data.code == 200) {
+					location.href="back/manager/index.html";
+					$("#myform")[0].reset();
+					return;
+				}
+				showMsg("账号或密码错误，请确认后重新登录...", "red");
+			})
+		}
+	}
+})
+</script>
 </body>
 </html>

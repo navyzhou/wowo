@@ -1,10 +1,56 @@
+spring:
+   profiles:
+      active: dev-8888
+
+---
+spring:
+   profiles: dev-8888
+   datasource:
+      driverClassName: com.mysql.cj.jdbc.Driver
+      type: com.alibaba.druid.pool.DruidDataSource
+      url: jdbc:mysql://127.0.0.1:3306/wowo?useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useOldAliasMetadataBehavior=true
+      username: root
+      password: a
+      
+   http:
+      encoding:
+         charset: utf-8
+         force: true
+         enabled: true
+         
+   mail:
+      protocol: smtp
+      username: 1293580602@qq.com
+      password: dihpepdwtahlgefh
+      port: 465
+      host: smtp.qq.com
+      properties:
+         mail:
+            smtp:
+               auth: true
+               ssl:
+                  enable: true
+                  
+   resources: # 静态资源路径配置
+      static-locations: classpath:/META-INF/resources/,classpath:/static/,classpath:/public/,classpath:/resources/,file:${web.upload-path}
+      
+mybatis:
+   mapper-locations: classpath:mapper/*Mapper.xml # 映射文件路径
+   type-aliases-package: com.yc.wowo.bean # 要启用别名的包路径
+
 server:
    port: 8888
 
 web:
    upload-path: D:/ # 文件上传路径配置
+  
+logging:
+   level:
+      com.yc.wowo.mapper: debug     
 
+---
 spring:
+   profiles: dev-8889
    datasource:
       driverClassName: com.mysql.cj.jdbc.Driver
       type: com.alibaba.druid.pool.DruidDataSource
@@ -41,3 +87,9 @@ mybatis:
 logging:
    level:
       com.yc.wowo.mapper: debug
+
+server:
+   port: 8889
+
+web:
+   upload-path: D:/ # 文件上传路径配置

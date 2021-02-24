@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 注意：此时的命名空间必须是对应的映射接口的全路径 -->
+<mapper namespace="com.yc.wowo.mapper.IAdminInfoMapper">
+	<select id="login" resultType="AdminInfo" parameterType="AdminInfo">
+		select aid, aname, tel, photo from admininfo where aname=#{aname} and pwd=md5(#{pwd}) and status !=0
+	</select>
+</mapper>
