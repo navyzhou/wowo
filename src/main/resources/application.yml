@@ -11,6 +11,8 @@ spring:
       url: jdbc:mysql://127.0.0.1:3306/wowo?useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useOldAliasMetadataBehavior=true
       username: root
       password: a
+      dbName: wowo
+      backupPath: D:/databack
       
    http:
       encoding:
@@ -33,7 +35,12 @@ spring:
                   
    resources: # 静态资源路径配置
       static-locations: classpath:/META-INF/resources/,classpath:/static/,classpath:/public/,classpath:/resources/,file:${web.upload-path}
-      
+   
+   redis:
+      database: 0
+      port: 6379
+      host: 127.0.0.1
+       
 mybatis:
    mapper-locations: classpath:mapper/*Mapper.xml # 映射文件路径
    type-aliases-package: com.yc.wowo.bean # 要启用别名的包路径

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.yc.wowo.bean.TypeInfo;
 import com.yc.wowo.biz.ITypeInfoBiz;
+import com.yc.wowo.dao.IRedisDao;
 import com.yc.wowo.dto.JsonObject;
 import com.yc.wowo.mapper.ITypeInfoMapper;
 import com.yc.wowo.util.StringUtil;
@@ -23,7 +24,10 @@ import com.yc.wowo.util.StringUtil;
 public class TypeInfoBizImpl implements ITypeInfoBiz{
 	@Autowired
 	private ITypeInfoMapper typeInfoMapper;
-	
+
+	@Autowired
+	private IRedisDao redisDao;
+
 	@Override
 	public int add(TypeInfo tf) {
 		if (StringUtil.checkNull(tf.getTname())) {
@@ -47,7 +51,15 @@ public class TypeInfoBizImpl implements ITypeInfoBiz{
 
 	@Override
 	public List<TypeInfo> finds() {
-		return typeInfoMapper.finds();
+		// 从缓存服务器中获取所有类型，如果没有则查询数据库然后缓存到redis中
+		Object obj = redisDao.get("types");
+		
+		if (obj == null) {
+			List<TypeInfo> types = typeInfoMapper.finds();
+			redisDao.set("types", types);
+			return types;
+		}
+		return (List<TypeInfo>) obj;
 	}
 
 	/**
